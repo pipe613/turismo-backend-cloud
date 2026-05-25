@@ -90,6 +90,11 @@ class ReservaViewSet(viewsets.ModelViewSet):
     queryset = Reserva.objects.all()
     serializer_class = ReservaSerializer
 
+    def perform_create(self, serializer):
+        # Si el usuario no viene en el JSON, asignamos el usuario logueado o un default (ID 1)
+        user = self.request.user if self.request.user.is_authenticated else User.objects.get(id=1)
+        serializer.save(user=user)
+
     # MÉTODO DE DIAGNÓSTICO
     def create(self, request, *args, **kwargs):
         print(f"--- DATOS RECIBIDOS EN RESERVA ---")

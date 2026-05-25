@@ -15,11 +15,11 @@
                 <h2 class="text-2xl font-bold text-blue-400"><i class="fas fa-map-marked-alt mr-2"></i>TurismoPro</h2>
             </div>
             <nav class="mt-6">
-                <a href="#" class="flex items-center py-3 px-6 bg-slate-800 border-l-4 border-blue-500 text-white">
-                    <i class="fas fa-tachometer-alt mr-3"></i> Dashboard
+                <a href="{% url 'admin_panel' %}" class="flex items-center py-3 px-6 {% if request.resolver_match.url_name == 'admin_panel' %}bg-slate-800 border-l-4 border-blue-500{% endif %} text-white">
+                    <i class="fas fa-route mr-3"></i> Tours
                 </a>
-                <a href="/admin/" class="flex items-center py-3 px-6 text-slate-400 hover:bg-slate-800 hover:text-white transition">
-                    <i class="fas fa-user-shield mr-3"></i> Django Admin
+                <a href="{% url 'reservas_panel' %}" class="flex items-center py-3 px-6 {% if request.resolver_match.url_name == 'reservas_panel' %}bg-slate-800 border-l-4 border-blue-500{% endif %} text-white">
+                    <i class="fas fa-calendar-check mr-3"></i> Reservas
                 </a>
                 <div class="mt-10 px-6">
                     <p class="text-xs uppercase text-slate-500 font-bold">Sesión</p>

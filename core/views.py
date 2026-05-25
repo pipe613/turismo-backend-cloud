@@ -1,8 +1,7 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required, user_passes_test
-from rest_framework import viewsets
-from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.models import User
+from rest_framework import viewsets
 
 from .models import Tour, Disponibilidad, Reserva
 from .serializers import (
@@ -23,14 +22,14 @@ def admin_panel(request):
         nombre = request.POST.get('nombre')
         destino = request.POST.get('destino')
         precio = request.POST.get('precio')
-        duracion = request.POST.get('duracion_dias') # Capturamos el nuevo campo
+        duracion = request.POST.get('duracion_dias')
         
         if nombre and destino and precio and duracion:
             Tour.objects.create(
                 nombre=nombre, 
                 destino=destino, 
                 precio=precio, 
-                duracion_dias=duracion # Lo guardamos aquí
+                duracion_dias=duracion
             )
             return redirect('admin_panel')
             
@@ -40,14 +39,13 @@ def admin_panel(request):
         'total_tours': tours.count(),
         'total_reservas': Reserva.objects.count(),
     })
-    
+
 @login_required
 @user_passes_test(admin_only)
 def eliminar_tour(request, tour_id):
     tour = get_object_or_404(Tour, id=tour_id)
     tour.delete()
     return redirect('admin_panel')
-
 
 @login_required
 @user_passes_test(admin_only)
@@ -62,7 +60,25 @@ def editar_tour(request, tour_id):
         return redirect('admin_panel')
     return render(request, 'editar_tour.html', {'tour': tour})
 
-# --- 2. API VIEWS  ---
+@login_required
+@user_passes_test(admin_only)
+def reservas_panel(request):
+    reservas = Reserva.objects.all().order_by('-id')
+    # Agregamos las estadísticas aquí también
+    return render(request, 'reservas_panel.html', {
+        'reservas': reservas,
+        'total_tours': Tour.objects.count(),
+        'total_reservas': reservas.count(),
+    })
+
+@login_required
+@user_passes_test(admin_only)
+def eliminar_reserva(request, reserva_id):
+    reserva = get_object_or_404(Reserva, id=reserva_id)
+    reserva.delete()
+    return redirect('reservas_panel')
+
+# --- 2. API VIEWS ---
 class TourViewSet(viewsets.ModelViewSet):
     queryset = Tour.objects.all()
     serializer_class = TourSerializer

@@ -58,23 +58,23 @@
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div class="lg:col-span-1">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 sticky top-10">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                         <h3 class="text-xl font-bold text-slate-800 mb-6">Nuevo Tour</h3>
                         <form method="POST" class="space-y-4">
                             {% csrf_token %}
                             <div>
-                                <label class="text-sm font-semibold text-slate-600">Nombre del Tour</label>
-                                <input name="nombre" class="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Ej: Salar de Uyuni" required>
+                                <label class="text-sm font-semibold text-slate-600">Nombre</label>
+                                <input name="nombre" class="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" required>
                             </div>
                             <div>
                                 <label class="text-sm font-semibold text-slate-600">Destino</label>
-                                <input name="destino" class="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Ej: Potosí, Bolivia" required>
+                                <input name="destino" class="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" required>
                             </div>
                             <div>
                                 <label class="text-sm font-semibold text-slate-600">Precio (USD)</label>
-                                <input type="number" name="precio" class="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="99.99" required>
+                                <input type="number" name="precio" class="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" required>
                             </div>
-                            <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl transition duration-300 shadow-lg shadow-slate-200">
+                            <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl transition duration-300">
                                 <i class="fas fa-plus-circle mr-2"></i> Crear Tour
                             </button>
                         </form>
@@ -93,17 +93,20 @@
                                         <th class="px-6 py-4">Tour</th>
                                         <th class="px-6 py-4">Ubicación</th>
                                         <th class="px-6 py-4">Precio</th>
-                                        <th class="px-6 py-4 text-center">Estado</th>
+                                        <th class="px-6 py-4 text-center">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-100">
                                     {% for tour in tours %}
                                     <tr class="hover:bg-slate-50/80 transition">
                                         <td class="px-6 py-4 font-bold text-slate-700">{{ tour.nombre }}</td>
-                                        <td class="px-6 py-4 text-slate-500"><i class="fas fa-map-marker-alt text-red-400 mr-1"></i> {{ tour.destino }}</td>
+                                        <td class="px-6 py-4 text-slate-500">{{ tour.destino }}</td>
                                         <td class="px-6 py-4 font-bold text-emerald-600">${{ tour.precio }}</td>
                                         <td class="px-6 py-4 text-center">
-                                            <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-bold">Activo</span>
+                                            <div class="flex justify-center space-x-3">
+                                                <a href="{% url 'editar_tour' tour.id %}" class="text-blue-600 hover:text-blue-800 p-2"><i class="fas fa-edit"></i></a>
+                                                <a href="{% url 'eliminar_tour' tour.id %}" class="text-red-500 hover:text-red-700 p-2" onclick="return confirm('¿Eliminar?')"><i class="fas fa-trash-alt"></i></a>
+                                            </div>
                                         </td>
                                     </tr>
                                     {% endfor %}

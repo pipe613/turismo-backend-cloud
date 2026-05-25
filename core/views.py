@@ -1,3 +1,16 @@
+from rest_framework import viewsets
+from django.contrib.auth.models import User
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
+from .models import Tour, Disponibilidad, Reserva
+from .serializers import (
+    TourSerializer, 
+    DisponibilidadSerializer, 
+    ReservaSerializer, 
+    UserSerializer
+)
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .models import Tour, Reserva
@@ -28,3 +41,20 @@ def admin_panel(request):
         'total_reservas': total_reservas,
     }
     return render(request, 'admin_panel.html', context)
+
+# --- API VIEWS ---
+class TourViewSet(viewsets.ModelViewSet):
+    queryset = Tour.objects.all()
+    serializer_class = TourSerializer
+
+class DisponibilidadViewSet(viewsets.ModelViewSet):
+    queryset = Disponibilidad.objects.all()
+    serializer_class = DisponibilidadSerializer
+
+class ReservaViewSet(viewsets.ModelViewSet):
+    queryset = Reserva.objects.all()
+    serializer_class = ReservaSerializer
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

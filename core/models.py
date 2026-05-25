@@ -36,19 +36,12 @@ class Reserva(models.Model):
     ]
 
     usuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reservas')
-    disponibilidad = models.ForeignKey(Disponibilidad, on_delete=models.PROTECT, related_name='reservas')
-    fecha_reserva = models.DateTimeField(auto_now_add=True)
-    estado = models.CharField(max_length=2, choices=ESTADOS, default='PE')
-    cantidad_pasajeros = models.PositiveIntegerField(default=1)
-    precio_total = models.DecimalField(max_digits=10, decimal_places=2)
-
-    def __str__(self):
-        return f"Reserva #{self.id} de {self.usuario.username}"
-    
-class Reserva(models.Model):
     tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='reservas')
-    fecha = models.DateField()
+    fecha = models.DateField(help_text="Fecha para la que se reserva el tour")
+    cantidad_pasajeros = models.PositiveIntegerField(default=1)
+    precio_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    estado = models.CharField(max_length=2, choices=ESTADOS, default='PE')
     fecha_creacion = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Reserva - {self.tour.nombre} ({self.fecha})"
+        return f"Reserva #{self.id} - {self.tour.nombre} ({self.fecha})"

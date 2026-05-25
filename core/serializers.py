@@ -21,4 +21,5 @@ class DisponibilidadSerializer(serializers.ModelSerializer):
 class ReservaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reserva
-        fields = ['id', 'tour', 'fecha_reserva', 'user']
+        # Excluimos 'usuario' y 'estado' porque los manejaremos en el ViewSet/Modelo
+        fields = ['tour', 'fecha', 'cantidad_pasajeros', 'precio_total']

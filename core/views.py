@@ -86,15 +86,17 @@ class DisponibilidadViewSet(viewsets.ModelViewSet):
     queryset = Disponibilidad.objects.all()
     serializer_class = DisponibilidadSerializer
 
-class ReservaViewSet(viewsets.ModelViewSet):
-    queryset = Reserva.objects.all()
-    serializer_class = ReservaSerializer
+from rest_framework import permissions
 
-    # MÉTODO DE DIAGNÓSTICO
-    def create(self, request, *args, **kwargs):
-        print(f"--- DATOS RECIBIDOS EN RESERVA ---")
-        print(f"Request Data: {request.data}")
-        return super().create(request, *args, **kwargs)
+class ReservaViewSet(viewsets.ModelViewSet):
+    queryset = Reserva.objects.all().order_by('-id')
+    serializer_class = ReservaSerializer
+    permission_classes = [permissions.IsAuthenticated] # Obligatorio para identificar al usuario
+
+    def perform_create(self, serializer):
+        # Asigna el usuario actual automáticamente
+        # Asegúrate de que el precio total se calcule o se maneje aquí
+        serializer.save(usuario=self.request.user)
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Admin Pro</title>
+</head>
+<body class="bg-gray-50 min-h-screen p-4 md:p-10">
+    <div class="max-w-5xl mx-auto bg-white shadow-xl rounded-2xl p-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-8">Administrar Tours</h1>
+        
+        <form method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10 bg-gray-50 p-6 rounded-xl">
+            {% csrf_token %}
+            <input name="nombre" placeholder="Nombre del Tour" class="border p-3 rounded-lg" required>
+            <input name="destino" placeholder="Destino" class="border p-3 rounded-lg" required>
+            <input type="number" name="precio" placeholder="Precio ($)" class="border p-3 rounded-lg" required>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold p-3 rounded-lg">Agregar</button>
+        </form>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="p-4 border-b">Nombre</th>
+                        <th class="p-4 border-b">Destino</th>
+                        <th class="p-4 border-b">Precio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tour in tours %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="p-4 border-b">{{ tour.nombre }}</td>
+                        <td class="p-4 border-b">{{ tour.destino }}</td>
+                        <td class="p-4 border-b font-semibold text-green-600">${{ tour.precio }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

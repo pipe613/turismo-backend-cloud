@@ -25,8 +25,3 @@ class DisponibilidadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Disponibilidad
         fields = '__all__'
-
-class ReservaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Reserva
-        fields = '__all__'

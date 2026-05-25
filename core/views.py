@@ -64,7 +64,6 @@ def editar_tour(request, tour_id):
 @user_passes_test(admin_only)
 def reservas_panel(request):
     reservas = Reserva.objects.all().order_by('-id')
-    # Agregamos las estadísticas aquí también
     return render(request, 'reservas_panel.html', {
         'reservas': reservas,
         'total_tours': Tour.objects.count(),
@@ -90,6 +89,12 @@ class DisponibilidadViewSet(viewsets.ModelViewSet):
 class ReservaViewSet(viewsets.ModelViewSet):
     queryset = Reserva.objects.all()
     serializer_class = ReservaSerializer
+
+    # MÉTODO DE DIAGNÓSTICO
+    def create(self, request, *args, **kwargs):
+        print(f"--- DATOS RECIBIDOS EN RESERVA ---")
+        print(f"Request Data: {request.data}")
+        return super().create(request, *args, **kwargs)
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

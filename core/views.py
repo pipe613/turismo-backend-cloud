@@ -48,6 +48,7 @@ def eliminar_tour(request, tour_id):
     tour.delete()
     return redirect('admin_panel')
 
+
 @login_required
 @user_passes_test(admin_only)
 def editar_tour(request, tour_id):
@@ -56,11 +57,12 @@ def editar_tour(request, tour_id):
         tour.nombre = request.POST.get('nombre')
         tour.destino = request.POST.get('destino')
         tour.precio = request.POST.get('precio')
+        tour.duracion_dias = request.POST.get('duracion_dias')
         tour.save()
         return redirect('admin_panel')
     return render(request, 'editar_tour.html', {'tour': tour})
 
-# --- 2. API VIEWS (¡Necesarias para que la app móvil funcione!) ---
+# --- 2. API VIEWS  ---
 class TourViewSet(viewsets.ModelViewSet):
     queryset = Tour.objects.all()
     serializer_class = TourSerializer

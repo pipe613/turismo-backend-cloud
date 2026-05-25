@@ -19,13 +19,6 @@ class DisponibilidadSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ReservaSerializer(serializers.ModelSerializer):
-    # Aceptamos 'fecha' desde la App y lo mapeamos a 'fecha_reserva'
-    fecha = serializers.DateField(source='fecha_reserva', write_only=True, required=True)
-
     class Meta:
         model = Reserva
-        fields = ['id', 'user', 'tour', 'fecha_reserva', 'fecha']
-        extra_kwargs = {
-            'fecha_reserva': {'read_only': True},
-            'user': {'required': False}
-        }
+        fields = '__all__'

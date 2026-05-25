@@ -23,8 +23,15 @@ def admin_panel(request):
         nombre = request.POST.get('nombre')
         destino = request.POST.get('destino')
         precio = request.POST.get('precio')
-        if nombre and destino and precio:
-            Tour.objects.create(nombre=nombre, destino=destino, precio=precio)
+        duracion = request.POST.get('duracion_dias') # Capturamos el nuevo campo
+        
+        if nombre and destino and precio and duracion:
+            Tour.objects.create(
+                nombre=nombre, 
+                destino=destino, 
+                precio=precio, 
+                duracion_dias=duracion # Lo guardamos aquí
+            )
             return redirect('admin_panel')
             
     tours = Tour.objects.all().order_by('-id')

@@ -8,9 +8,10 @@
         <h2 class="text-xl font-bold mb-4">Editar: {{ tour.nombre }}</h2>
         <form method="POST" class="space-y-4">
             {% csrf_token %}
-            <input name="nombre" value="{{ tour.nombre }}" class="w-full border p-2 rounded">
-            <input name="destino" value="{{ tour.destino }}" class="w-full border p-2 rounded">
-            <input type="number" name="precio" value="{{ tour.precio }}" class="w-full border p-2 rounded">
+            <input name="nombre" value="{{ tour.nombre }}" class="w-full border p-2 rounded" required>
+            <input name="destino" value="{{ tour.destino }}" class="w-full border p-2 rounded" required>
+            <input type="number" name="precio" value="{{ tour.precio }}" class="w-full border p-2 rounded" required>
+            <input type="number" name="duracion_dias" value="{{ tour.duracion_dias }}" class="w-full border p-2 rounded" required placeholder="Duración en días">
             <button type="submit" class="bg-blue-600 text-white w-full p-2 rounded">Guardar Cambios</button>
         </form>
     </div>

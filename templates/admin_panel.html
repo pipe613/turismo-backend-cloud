@@ -2,41 +2,118 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Admin Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Dashboard Admin | Turismo App</title>
 </head>
-<body class="bg-gray-50 min-h-screen p-4 md:p-10">
-    <div class="max-w-5xl mx-auto bg-white shadow-xl rounded-2xl p-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-8">Administrar Tours</h1>
-        
-        <form method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10 bg-gray-50 p-6 rounded-xl">
-            {% csrf_token %}
-            <input name="nombre" placeholder="Nombre del Tour" class="border p-3 rounded-lg" required>
-            <input name="destino" placeholder="Destino" class="border p-3 rounded-lg" required>
-            <input type="number" name="precio" placeholder="Precio ($)" class="border p-3 rounded-lg" required>
-            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold p-3 rounded-lg">Agregar</button>
-        </form>
+<body class="bg-slate-50 font-sans">
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="p-4 border-b">Nombre</th>
-                        <th class="p-4 border-b">Destino</th>
-                        <th class="p-4 border-b">Precio</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for tour in tours %}
-                    <tr class="hover:bg-gray-50">
-                        <td class="p-4 border-b">{{ tour.nombre }}</td>
-                        <td class="p-4 border-b">{{ tour.destino }}</td>
-                        <td class="p-4 border-b font-semibold text-green-600">${{ tour.precio }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+    <div class="flex min-h-screen">
+        <aside class="w-64 bg-slate-900 text-white hidden md:block">
+            <div class="p-6">
+                <h2 class="text-2xl font-bold text-blue-400"><i class="fas fa-map-marked-alt mr-2"></i>TurismoPro</h2>
+            </div>
+            <nav class="mt-6">
+                <a href="#" class="flex items-center py-3 px-6 bg-slate-800 border-l-4 border-blue-500 text-white">
+                    <i class="fas fa-tachometer-alt mr-3"></i> Dashboard
+                </a>
+                <a href="/admin/" class="flex items-center py-3 px-6 text-slate-400 hover:bg-slate-800 hover:text-white transition">
+                    <i class="fas fa-user-shield mr-3"></i> Django Admin
+                </a>
+                <div class="mt-10 px-6">
+                    <p class="text-xs uppercase text-slate-500 font-bold">Sesión</p>
+                    <p class="text-sm mt-2 text-slate-300"><i class="fas fa-user-circle mr-2"></i> {{ user.username }}</p>
+                    <a href="/admin/logout/" class="block mt-4 text-xs text-red-400 hover:text-red-300">Cerrar Sesión</a>
+                </div>
+            </nav>
+        </aside>
+
+        <main class="flex-1 p-6 md:p-10">
+            <header class="flex justify-between items-center mb-10">
+                <h1 class="text-3xl font-extrabold text-slate-800">Panel de Control</h1>
+                <span class="bg-blue-100 text-blue-700 px-4 py-1 rounded-full text-sm font-semibold">Administrador</span>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center">
+                    <div class="bg-blue-500 p-4 rounded-xl text-white mr-4">
+                        <i class="fas fa-route fa-2x"></i>
+                    </div>
+                    <div>
+                        <p class="text-slate-500 text-sm font-medium">Tours Activos</p>
+                        <p class="text-3xl font-bold text-slate-800">{{ total_tours }}</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-center">
+                    <div class="bg-emerald-500 p-4 rounded-xl text-white mr-4">
+                        <i class="fas fa-calendar-check fa-2x"></i>
+                    </div>
+                    <div>
+                        <p class="text-slate-500 text-sm font-medium">Total Reservas</p>
+                        <p class="text-3xl font-bold text-slate-800">{{ total_reservas }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-1">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 sticky top-10">
+                        <h3 class="text-xl font-bold text-slate-800 mb-6">Nuevo Tour</h3>
+                        <form method="POST" class="space-y-4">
+                            {% csrf_token %}
+                            <div>
+                                <label class="text-sm font-semibold text-slate-600">Nombre del Tour</label>
+                                <input name="nombre" class="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Ej: Salar de Uyuni" required>
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-slate-600">Destino</label>
+                                <input name="destino" class="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Ej: Potosí, Bolivia" required>
+                            </div>
+                            <div>
+                                <label class="text-sm font-semibold text-slate-600">Precio (USD)</label>
+                                <input type="number" name="precio" class="w-full mt-1 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" placeholder="99.99" required>
+                            </div>
+                            <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-xl transition duration-300 shadow-lg shadow-slate-200">
+                                <i class="fas fa-plus-circle mr-2"></i> Crear Tour
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                        <div class="p-6 border-b border-slate-50 bg-slate-50/50">
+                            <h3 class="text-xl font-bold text-slate-800">Catálogo de Tours</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="bg-slate-50 text-slate-500 text-xs uppercase font-bold">
+                                    <tr>
+                                        <th class="px-6 py-4">Tour</th>
+                                        <th class="px-6 py-4">Ubicación</th>
+                                        <th class="px-6 py-4">Precio</th>
+                                        <th class="px-6 py-4 text-center">Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    {% for tour in tours %}
+                                    <tr class="hover:bg-slate-50/80 transition">
+                                        <td class="px-6 py-4 font-bold text-slate-700">{{ tour.nombre }}</td>
+                                        <td class="px-6 py-4 text-slate-500"><i class="fas fa-map-marker-alt text-red-400 mr-1"></i> {{ tour.destino }}</td>
+                                        <td class="px-6 py-4 font-bold text-emerald-600">${{ tour.precio }}</td>
+                                        <td class="px-6 py-4 text-center">
+                                            <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-bold">Activo</span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 </body>
 </html>

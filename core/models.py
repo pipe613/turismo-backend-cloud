@@ -44,3 +44,11 @@ class Reserva(models.Model):
 
     def __str__(self):
         return f"Reserva #{self.id} de {self.usuario.username}"
+    
+class Reserva(models.Model):
+    tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='reservas')
+    fecha = models.DateField()
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Reserva - {self.tour.nombre} ({self.fecha})"

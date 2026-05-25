@@ -3,6 +3,13 @@ from rest_framework import viewsets
 from .models import Tour, Disponibilidad, Reserva
 from django.contrib.auth.models import User
 from .serializers import TourSerializer, DisponibilidadSerializer, ReservaSerializer, UserSerializer
+from .models import Tour, Reserva 
+from .serializers import TourSerializer, ReservaSerializer 
+
+
+class ReservaViewSet(viewsets.ModelViewSet):
+    queryset = Reserva.objects.all()
+    serializer_class = ReservaSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

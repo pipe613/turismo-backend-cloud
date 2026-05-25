@@ -1,7 +1,7 @@
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required, user_passes_test
 from rest_framework import viewsets
 from django.contrib.auth.models import User
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
 
 from .models import Tour, Disponibilidad, Reserva
 from .serializers import (
@@ -11,16 +11,12 @@ from .serializers import (
     UserSerializer
 )
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required, user_passes_test
-from .models import Tour, Reserva
-
-# Esta función verifica que el usuario sea administrador (Staff)
+# --- 1. PANEL DE ADMINISTRACIÓN PROPIO ---
 def admin_only(user):
     return user.is_staff
 
 @login_required
-@user_passes_test(admin_only) # ¡Seguridad reforzada!
+@user_passes_test(admin_only)
 def admin_panel(request):
     if request.method == 'POST':
         nombre = request.POST.get('nombre')
@@ -30,19 +26,14 @@ def admin_panel(request):
             Tour.objects.create(nombre=nombre, destino=destino, precio=precio)
             return redirect('admin_panel')
             
-    # Estadísticas para el Dashboard
     tours = Tour.objects.all().order_by('-id')
-    total_tours = tours.count()
-    total_reservas = Reserva.objects.count()
-    
-    context = {
+    return render(request, 'admin_panel.html', {
         'tours': tours,
-        'total_tours': total_tours,
-        'total_reservas': total_reservas,
-    }
-    return render(request, 'admin_panel.html', context)
+        'total_tours': tours.count(),
+        'total_reservas': Reserva.objects.count(),
+    })
 
-# --- API VIEWS ---
+# --- 2. API VIEWS (¡Necesarias para que la app móvil funcione!) ---
 class TourViewSet(viewsets.ModelViewSet):
     queryset = Tour.objects.all()
     serializer_class = TourSerializer
